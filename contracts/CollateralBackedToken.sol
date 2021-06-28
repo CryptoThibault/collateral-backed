@@ -6,20 +6,25 @@ import "./CollateralToken.sol";
 
 contract CollateralBackedToken is ERC20 {
   CollateralToken private _ct;
+  uint private _rate;
 
-  constructor() ERC20("Collateral Backed Token", "CBT") {}
+
+  constructor(address tokenAddress, uint rate_) ERC20("Collateral Backed Token", "CBT") {
+    _ct = CollateralToken(tokenAddress);
+    _rate = rate_;
+  }
 
   function balanceLocked() public view returns (uint) {
-    return balanceOf(msg.sender) * 2;
+    return balanceOf(msg.sender) * _rate;
   } 
   
   function deposit(uint amount) public {
     _ct.transferFrom(msg.sender, address(this), amount);
-    _mint(msg.sender, amount / 2);
+    _mint(msg.sender, amount /_rate);
   }
   
   function withdraw(uint amount) public {
-    _burn(msg.sender, amount / 2);
+    _burn(msg.sender, amount / _rate);
     _ct.transfer(msg.sender, amount);
   }
 }
