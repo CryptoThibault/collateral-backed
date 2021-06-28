@@ -9,7 +9,7 @@ async function main() {
   const CollateralBackedToken = await hre.ethers.getContractFactory('CollateralBackedToken');
   const collateralBackedToken = await CollateralBackedToken.deploy(TOKEN_CONTRACT, 2);
   await collateralBackedToken.deployed();
-  await deployed('CollateralToken', hre.network.name, collateralBackedToken.address);
+  await deployed('CollateralBackedToken', hre.network.name, collateralBackedToken.address);
 }
 
 main()
