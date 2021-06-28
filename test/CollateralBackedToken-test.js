@@ -30,9 +30,9 @@ describe('Collateral Backed Token', async function () {
     beforeEach(async function () {
       DEPOSIT = await cbt.connect(alice).deposit(AMOUNT);
     });
-    // it('should change token balances', async function () {
-    //  expect(DEPOSIT).to.changeTokenBalances(ct, [alice, cbt], [AMOUNT.mul(-1), AMOUNT]);
-    // });
+    it('should change token balances', async function () {
+      expect(DEPOSIT).to.changeTokenBalances(ct, [alice, cbt], [AMOUNT.mul(-1), AMOUNT]);
+    });
     it('should mint CBT to sender', async function () {
       expect(await cbt.balanceOf(alice.address)).to.equal(AMOUNT.div(2));
     });
@@ -46,9 +46,9 @@ describe('Collateral Backed Token', async function () {
       await cbt.connect(alice).deposit(AMOUNT);
       WITHDRAW = await cbt.connect(alice).withdraw(AMOUNT);
     });
-    // it('should change token balances', async function () {
-    //  expect(WITHDRAW).to.changeTokenBalances(ct, [cbt, alice], [AMOUNT.mul(-1), AMOUNT]);
-    // });
+    it('should change token balances', async function () {
+      expect(WITHDRAW).to.changeTokenBalances(ct, [cbt, alice], [AMOUNT.mul(-1), AMOUNT]);
+    });
     it('should burn CBT from sender', async function () {
       expect(await cbt.balanceOf(alice.address)).to.equal(0);
     });
