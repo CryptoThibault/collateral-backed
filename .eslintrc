@@ -37,10 +37,7 @@
         "properties": "always"
       }
     ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
+    "comma-dangle": "off",
     "comma-spacing": [
       "error",
       {

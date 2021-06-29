@@ -26,33 +26,39 @@ describe('Collateral Backed Token', async function () {
     expect(await cbt.symbol()).to.equal(SYMBOL);
   });
   describe('Deposit', async function () {
-    let DEPOSIT;
-    beforeEach(async function () {
-      DEPOSIT = await cbt.connect(alice).deposit(AMOUNT);
-    });
     it('should change token balances', async function () {
-      expect(DEPOSIT).to.changeTokenBalances(ct, [alice, cbt], [AMOUNT.mul(-1), AMOUNT]);
+      await expect(() => cbt.connect(alice).deposit(AMOUNT)).to.changeTokenBalances(
+        ct,
+        [alice, cbt],
+        [AMOUNT.mul(-1), AMOUNT]
+      );
     });
     it('should mint CBT to sender', async function () {
+      await cbt.connect(alice).deposit(AMOUNT);
       expect(await cbt.balanceOf(alice.address)).to.equal(AMOUNT.div(2));
     });
     it('should read the good locked balance', async function () {
+      await cbt.connect(alice).deposit(AMOUNT);
       expect(await cbt.connect(alice).balanceLocked()).to.equal(AMOUNT);
     });
   });
   describe('Withdraw', async function () {
-    let WITHDRAW;
     beforeEach(async function () {
       await cbt.connect(alice).deposit(AMOUNT);
-      WITHDRAW = await cbt.connect(alice).withdraw(AMOUNT);
     });
     it('should change token balances', async function () {
-      expect(WITHDRAW).to.changeTokenBalances(ct, [cbt, alice], [AMOUNT.mul(-1), AMOUNT]);
+      expect(() => cbt.connect(alice).withdraw(AMOUNT)).to.changeTokenBalances(
+        ct,
+        [cbt, alice],
+        [AMOUNT.mul(-1), AMOUNT]
+      );
     });
     it('should burn CBT from sender', async function () {
+      await cbt.connect(alice).withdraw(AMOUNT);
       expect(await cbt.balanceOf(alice.address)).to.equal(0);
     });
     it('should revert when amount exceeds balance', async function () {
+      await cbt.connect(alice).withdraw(AMOUNT);
       await expect(cbt.connect(bob).withdraw(AMOUNT)).to.revertedWith('ERC20: burn amount exceeds balance');
     });
   });
